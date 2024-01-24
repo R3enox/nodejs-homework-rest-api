@@ -4,20 +4,14 @@ const { HttpError, ctrlWrapper } = require("../helpers/index.js");
 
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 2, favorite } = req.query;
+  const { page = 1, limit = 2, favorite = null } = req.query;
   const skip = (page - 1) * limit;
-  if (favorite) {
-    const result = await Contact.find(
-      { owner, favorite },
-      "-createdAt -updatedAt",
-      {
-        skip,
-        limit,
-      }
-    ).populate("owner", "name email");
-    return res.json(result);
-  } else if (!favorite) throw HttpError(400, "Bad request");
-  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
+  const search = { owner };
+
+  if (favorite !== null) {
+    search.favorite = favorite;
+  }
+  const result = await Contact.find(search, "-createdAt -updatedAt", {
     skip,
     limit,
   }).populate("owner", "name email");
