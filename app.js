@@ -4,7 +4,9 @@ const cors = require("cors");
 require("dotenv").config();
 
 const authRouter = require("./routes/api/auth");
-const contactsRouter = require("./routes/api/contacts");
+const usersRouter = require("./routes/api/users");
+const filtersRouter = require("./routes/api/filters");
+const drinksRouter = require("./routes/api/drinks");
 
 const fs = require("fs/promises");
 const moment = require("moment");
@@ -26,7 +28,9 @@ app.use(async (req, res, next) => {
 });
 
 app.use("/api/users", authRouter);
-app.use("/api/contacts", contactsRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/filters", filtersRouter);
+app.use("/api/drinks", drinksRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
@@ -38,3 +42,5 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+
+
